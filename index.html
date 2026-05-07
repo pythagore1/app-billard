@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="theme-color" content="#C9A84C"/>
+<meta name="description" content="Accessoires de billard premium — Yaoundé, Cameroun. Craies, gants, embouts, queues."/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="Ruach Billard"/>
+<link rel="manifest" href="/manifest.json"/>
+<link rel="apple-touch-icon" href="/icons/icon-192.png"/>
+<link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png"/>
+<link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512.png"/>
+<title>Ruach Billard</title>
+<!-- Preconnect pour réduire la latence fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'"/>
+<noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap"/></noscript>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- PWA BAR -->
+<div id="pwaBar">
+  <img id="pwaLogo" class="pwa-logo" alt="logo"/>
+  <div class="pwa-texts">
+    <div class="pwa-title" id="pwaTitle">Installer Ruach Billard</div>
+    <div class="pwa-sub" id="pwaSub">Acces rapide depuis votre ecran d'accueil</div>
+  </div>
+  <button id="pwaBtnInstall">⬇ Installer</button>
+  <button id="pwaBtnClose" onclick="closePwaBar()">✕</button>
+</div>
+
+<!-- BOUTON FLOTTANT INSTALLER -->
+<button id="pwaFab" onclick="triggerPwaInstall()" title="Installer l'application">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 3v13M5 15l7 7 7-7"/><path d="M3 21h18"/></svg>
+  Installer l'app
+</button>
+
+<!-- PANIER FAB -->
+<button id="cartFab" onclick="openCart()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;flex-shrink:0"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+  Panier <span id="cartBadge">0</span>
+</button>
+
+<!-- OVERLAY PANIER -->
+<div class="cart-overlay" id="cartOverlay" onclick="closeCart()"></div>
+
+<!-- TIROIR PANIER -->
+<div id="cartDrawer">
+  <div class="cart-hdr">
+    <div style="display:flex;align-items:center;gap:10px">
+      <span class="cart-hdr-title">🛒 Mon Panier</span>
+      <span class="cart-hdr-count" id="cartCount">0 article</span>
+    </div>
+    <button class="cart-close-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div id="cartItems">
+    <div class="cart-empty"><div class="cart-empty-icon">🛒</div><p>Votre panier est vide.<br/>Ajoutez des produits depuis le catalogue.</p></div>
+  </div>
+  <div class="cart-footer" id="cartFooter" style="display:none">
+    <div class="cart-total-row">
+      <span class="cart-total-lbl">Total commande</span>
+      <span class="cart-total-val" id="cartGrandTotal">0 FCFA</span>
+    </div>
+    <div class="cart-actions">
+      <button class="btn-cart-wa" onclick="checkoutCartWA()">
+        <svg viewBox="0 0 24 24" fill="currentColor" style="width:16px;height:16px;flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.057.522 4.01 1.513 5.734L0 24l6.38-1.498A11.926 11.926 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.612-.48-5.144-1.33l-.367-.219-3.785.889.906-3.694-.24-.38A9.96 9.96 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Commander tout via WhatsApp
+      </button>
+      <button class="btn-cart-orange" onclick="checkoutCartOrange()">🟠 Payer via Orange Money</button>
+      <button class="btn-cart-clear" onclick="clearCart()">🗑 Vider le panier</button>
+    </div>
+  </div>
+</div>
+
+<!-- BARRE MISE À JOUR SW -->
+<div id="swUpdateBar">
+  <div class="sw-update-text"><strong>Mise à jour disponible !</strong> Une nouvelle version est prête.</div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button id="swUpdateBtn" onclick="applySwUpdate()">Mettre à jour</button>
+  </div>
+</div>
+
+<!-- LOGIN -->
+<div class="login-bg" id="loginBg" style="display:none">
+  <div class="login-box">
+    <img id="loginLogo" alt="logo"/>
+    <h2>Espace Admin</h2>
+    <p>Connectez-vous pour gerer votre boutique</p>
+    <input class="login-inp" type="password" id="loginPwd" placeholder="Mot de passe" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <div class="login-err" id="loginErr">Mot de passe incorrect</div>
+    <button class="btn-full bg" onclick="doLogin()" style="margin-bottom:8px">Se connecter</button>
+    <button class="btn-full bgh" onclick="closeLogin()">Annuler</button>
+  </div>
+</div>
+
+<!-- VITRINE -->
+<div id="vitrine">
+<nav id="mainNav">
+  <div class="nav-inner">
+    <a href="#" class="nav-brand">
+      <img id="navLogo" alt="Ruach Billard"/>
+      <div>
+        <div class="nav-brand-name">Ruach Billard</div>
+        <span class="nav-brand-sub" id="navTagline">Excellence · Precision</span>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a href="#produits" id="navProd">Produits</a>
+      <a href="#commander" id="navOrder">Commander</a>
+      <a href="#contact" id="navContact">Contact</a>
+      <button class="btn-lang" onclick="toggleLang()" id="btnLang">EN</button>
+      <button class="btn-admin" onclick="openLogin()">Admin</button>
+      <a href="#" class="nav-wa" id="navWa">WhatsApp</a>
+    </div>
+    <button class="hamburger" onclick="toggleMobMenu()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+<div class="mob-menu" id="mobMenu">
+  <a href="#produits" onclick="closeMobMenu()" id="mmProd">Produits</a>
+  <a href="#commander" onclick="closeMobMenu()" id="mmOrder">Commander</a>
+  <a href="#contact" onclick="closeMobMenu()" id="mmContact">Contact</a>
+  <button onclick="toggleLang();closeMobMenu();" id="mmLang">English</button>
+  <button onclick="closeMobMenu();openLogin();">Admin</button>
+</div>
+
+<section class="hero">
+  <div class="hero-bg"></div><div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Yaounde · Cameroun</div>
+    <h1 id="heroTitle">L'Art du<br/><em>Billard</em></h1>
+    <p class="hero-sub" id="heroSub">Accessoires premium pour amateurs, clubs et competiteurs. Qualite professionnelle, livraison rapide au Cameroun.</p>
+    <div class="hero-btns">
+      <a href="#produits" class="btn-primary" id="heroCta1">Voir les produits</a>
+      <a href="#" class="btn-outline" id="heroCta2">Commander via WhatsApp</a>
+    </div>
+    <button id="pwaHeroBadge" onclick="triggerPwaInstall()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:14px;height:14px"><path d="M12 3v13M5 15l7 7 7-7"/><path d="M3 21h18"/></svg>
+      📲 Installer l'application
+    </button>
+  </div>
+</section>
+
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div><div class="stat-num">4+</div><div class="stat-lbl" id="stat1">Produits</div></div>
+    <div><div class="stat-num">100%</div><div class="stat-lbl" id="stat2">Qualite premium</div></div>
+    <div><div class="stat-num">MTN</div><div class="stat-lbl">Mobile Money</div></div>
+    <div><div class="stat-num">🟠</div><div class="stat-lbl">Orange Money</div></div>
+  </div>
+</div>
+
+<section id="produits" style="background:var(--dark)">
+  <div class="sec-inner">
+    <div class="sec-hdr">
+      <span class="sec-label" id="prodLabel">Notre catalogue</span>
+      <h2 id="prodTitle">Tous nos produits</h2>
+      <p id="prodSub">Du debutant au competiteur, trouvez les accessoires qu'il vous faut a des prix adaptes a vos besoins.</p>
+    </div>
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</section>
+
+<section id="commander" style="background:var(--dark2)">
+  <div class="sec-inner">
+    <div class="sec-hdr">
+      <span class="sec-label" id="howLabel">Processus</span>
+      <h2 id="howTitle">Comment commander ?</h2>
+      <p id="howSub">Simple, rapide et securise via WhatsApp et Mobile Money.</p>
+    </div>
+    <div class="steps-grid" id="stepsGrid"></div>
+  </div>
+</section>
+
+<section id="contact" style="background:var(--dark);padding:54px 20px">
+  <div class="sec-inner" style="max-width:640px;text-align:center">
+    <span class="sec-label" id="payLabel">Paiement</span>
+    <h2 style="font-family:var(--ff-head);font-size:clamp(20px,4vw,38px);color:var(--white);margin-bottom:14px" id="payTitle">Paiements Mobile Money</h2>
+    <p style="color:var(--gray-light);margin-bottom:24px;line-height:1.7;font-size:13px" id="paySub">Paiements via MTN Mobile Money ou Orange Money. Apres confirmation sur WhatsApp, effectuez le virement et envoyez la capture.</p>
+    <div class="pay-cards" id="payCards"></div>
+    <a href="#" class="btn-primary" id="contactWa" style="display:inline-flex;align-items:center;gap:7px">
+      <svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;flex-shrink:0"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.057.522 4.01 1.513 5.734L0 24l6.38-1.498A11.926 11.926 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.854 0-3.612-.48-5.144-1.33l-.367-.219-3.785.889.906-3.694-.24-.38A9.96 9.96 0 012 12C2 6.486 6.486 2 12 2s10 4.486 10 10-4.486 10-10 10z"/></svg>
+      <span id="contactWaTxt">Nous contacter sur WhatsApp</span>
+    </a>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <img id="footLogo" alt="logo" style="width:44px;height:44px;object-fit:contain;border-radius:8px;background:#000;padding:3px;margin-bottom:8px"/>
+        <div class="footer-brand-name">Ruach Billard</div>
+        <div class="footer-brand-tag" id="footTag">Votre partenaire pour tous les accessoires de billard au Cameroun.</div>
+      </div>
+      <div class="footer-col">
+        <h4 id="footLinksHdr">Liens</h4>
+        <a href="#produits" id="fProd">Produits</a>
+        <a href="#commander" id="fOrder">Commander</a>
+        <a href="#contact" id="fContact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="#" id="footWa">WhatsApp</a>
+        <p>Yaounde, Cameroun</p>
+        <div id="footBadges"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>2025 Ruach Billard · Yaounde, Cameroun</p>
+      <p id="footPay">Paiement via MTN Mobile Money et Orange Money</p>
+    </div>
+  </div>
+</footer>
+</div>
+
+<!-- ADMIN -->
+<div id="admin-panel">
+  <div class="adm-hdr">
+    <div class="logo">Ruach Billard <small style="font-family:var(--ff-body);font-size:10px;color:var(--gray);margin-left:5px;font-weight:400">Back-Office</small></div>
+    <div class="adm-btns">
+      <button class="bsm bgh" onclick="navAdm('dashboard')">Dashboard</button>
+      <button class="bsm bg" onclick="showVitrine()">Boutique</button>
+      <button class="bsm bgh" onclick="doLogout()">Deco.</button>
+    </div>
+  </div>
+  <div class="adm-mob-nav">
+    <div class="adm-mob-tabs">
+      <button class="adm-mob-tab on" data-s="dashboard" onclick="navAdm('dashboard',this)">Dashboard</button>
+      <button class="adm-mob-tab" data-s="products" onclick="navAdm('products',this)">Produits</button>
+      <button class="adm-mob-tab" data-s="addProduct" onclick="navAdm('addProduct',this)">+ Produit</button>
+      <button class="adm-mob-tab" data-s="settings" onclick="navAdm('settings',this)">Parametres</button>
+    </div>
+  </div>
+  <div class="adm-layout">
+    <div class="adm-sidebar">
+      <div class="sb-item on" data-s="dashboard" onclick="navAdm('dashboard',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>Dashboard</div>
+      <div class="sb-item" data-s="products" onclick="navAdm('products',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>Produits</div>
+      <div class="sb-item" data-s="addProduct" onclick="navAdm('addProduct',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Ajouter produit</div>
+      <div class="sb-item" data-s="settings" onclick="navAdm('settings',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M19.07 19.07l-1.41-1.41M4.93 19.07l1.41-1.41M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>Parametres</div>
+    </div>
+    <div class="adm-main">
+      <!-- DASHBOARD -->
+      <div class="adm-sec on" id="sec-dashboard">
+        <div class="adm-title">Dashboard</div><div class="adm-sub">Vue d'ensemble de votre boutique</div>
+        <div class="adm-stats" id="admStats"></div>
+        <div class="adm-card"><h3>Produits recents</h3><div class="tbl-wrap"><table class="dtable" id="dashTbl"><thead><tr><th>Photo</th><th>Produit</th><th>Variantes</th><th>Stock</th><th>Status</th></tr></thead><tbody></tbody></table></div></div>
+      </div>
+      <!-- PRODUCTS -->
+      <div class="adm-sec" id="sec-products">
+        <div class="adm-title">Gestion des produits</div><div class="adm-sub">Modifier, supprimer et gerer le stock</div>
+        <div class="adm-card" style="padding:0"><div class="tbl-wrap"><table class="dtable" id="prodTbl"><thead><tr><th style="padding-left:14px">Photo</th><th>Nom</th><th>Categorie</th><th>Variantes</th><th>Stock</th><th>Actions</th></tr></thead><tbody></tbody></table></div></div>
+      </div>
+      <!-- ADD/EDIT PRODUCT -->
+      <div class="adm-sec" id="sec-addProduct">
+        <div class="adm-title" id="formTitle">Ajouter un produit</div><div class="adm-sub">Remplissez les informations du produit</div>
+        <div class="adm-card">
+          <input type="hidden" id="editId"/>
+          <div class="fgrid">
+            <div class="fg"><label>Nom du produit *</label><input type="text" id="pName" placeholder="Ex: Craie Master"/></div>
+            <div class="fg"><label>Categorie</label><select id="pCat"><option>Craie</option><option>Gants</option><option>Embout</option><option>Queue</option><option>Autre</option></select></div>
+            <div class="fg full"><label>Description</label><textarea id="pDesc" placeholder="Description..."></textarea></div>
+          </div>
+          <div style="margin:18px 0 12px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <div><div style="font-size:13px;color:var(--white);font-weight:500">Variantes</div><div style="font-size:11px;color:var(--gray);margin-top:2px">Chaque variante a ses propres photos et prix</div></div>
+            <button class="bsm bg" onclick="addVarRow()">+ Ajouter variante</button>
+          </div>
+          <div id="varsContainer"></div>
+          <div style="margin:18px 0 8px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+            <div><div style="font-size:13px;color:var(--white);font-weight:500">Prix degressif (optionnel)</div></div>
+            <button class="bsm bg" onclick="addQtyRow()">+ Ajouter palier</button>
+          </div>
+          <div id="qtyRows" style="margin-bottom:8px">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:8px;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.07)">
+              <span style="font-size:10px;color:var(--gray)">Qte min</span><span style="font-size:10px;color:var(--gray)">Qte max (0=infini)</span><span style="font-size:10px;color:var(--gray)">Prix (FCFA)</span><span></span>
+            </div>
+          </div>
+          <div class="fgrid" style="margin-bottom:14px">
+            <div class="fg"><label>Stock</label><input type="number" id="pStock" placeholder="0" min="0"/></div>
+            <div class="fg"><label>Unite</label><input type="text" id="pUnit" placeholder="piece, boite, paire..."/></div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="bsm bg" style="padding:10px 22px;font-size:13px" onclick="saveProduct()">Enregistrer</button>
+            <button class="bsm bgh" onclick="resetForm()">Reinitialiser</button>
+          </div>
+        </div>
+      </div>
+      <!-- SETTINGS -->
+      <div class="adm-sec" id="sec-settings">
+        <div class="adm-title">Parametres</div><div class="adm-sub">Configuration de la boutique</div>
+        <div class="adm-card"><h3>Numeros de commande (WhatsApp)</h3><div id="listOrder"></div>
+          <div class="add-form"><div class="fg"><label>Label</label><input type="text" id="inOrderLabel" placeholder="Principal"/></div><div class="fg"><label>Numero</label><input type="text" id="inOrderNum" placeholder="+237656929480"/></div><button class="bsm bg" style="align-self:flex-end;padding:9px 16px" onclick="addContact('order')">+ Ajouter</button></div>
+        </div>
+        <div class="adm-card"><h3>Numeros MTN Mobile Money</h3><div id="listMtn"></div>
+          <div class="add-form"><div class="fg"><label>Label</label><input type="text" id="inMtnLabel" placeholder="Compte principal"/></div><div class="fg"><label>Numero MTN</label><input type="text" id="inMtnNum" placeholder="+237652964254"/></div><button class="bsm bg" style="align-self:flex-end;padding:9px 16px" onclick="addContact('mtn')">+ Ajouter</button></div>
+        </div>
+        <div class="adm-card"><h3>Numeros Orange Money</h3><div id="listOrange"></div>
+          <div class="add-form"><div class="fg"><label>Label</label><input type="text" id="inOrgLabel" placeholder="Compte principal"/></div><div class="fg"><label>Numero Orange</label><input type="text" id="inOrgNum" placeholder="+237656929480"/></div><button class="bsm bg" style="align-self:flex-end;padding:9px 16px" onclick="addContact('orange')">+ Ajouter</button></div>
+        </div>
+        <div class="adm-card"><h3>Changer le mot de passe</h3>
+          <div class="fgrid"><div class="fg"><label>Nouveau</label><input type="password" id="newPwd" placeholder="Nouveau mot de passe"/></div><div class="fg"><label>Confirmer</label><input type="password" id="confPwd" placeholder="Confirmer"/></div></div>
+          <button class="bsm bg" style="margin-top:10px" onclick="changePwd()">Changer</button>
+        </div>
+        <div class="adm-card"><h3>Donnees</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <button class="bsm bgh" onclick="exportData()">Exporter (JSON)</button>
+            <button class="bsm bdr" onclick="if(confirm('Reinitialiser toutes les donnees ?')){localStorage.clear();location.reload()}">Reinitialiser</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="prodModal"><div class="modal-box" id="modalBox"><button class="modal-close" onclick="closeModal()">x</button></div></div>
+<div class="toast" id="toast"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
