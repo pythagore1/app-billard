@@ -534,7 +534,11 @@ function renderProducts(){
     var card=document.createElement("div");
     card.className="pcard"+(inStock?"":" oos");
     card.dataset.pid=p.id;
-    card.innerHTML=(inStock?'<span class="stock-badge ok">'+tx("inStock")+'</span>':'<span class="stock-badge">'+tx("outStock")+'</span>')+
+    card.innerHTML=(inStock
+        ? (preorder && preorder.active
+            ? '<span class="stock-badge soon">⏳ Bientôt dispo</span>'
+            : '<span class="stock-badge ok">'+tx("inStock")+'</span>')
+        : '<span class="stock-badge">'+tx("outStock")+'</span>')+
       imgH+
       '<div class="card-body">'+
         '<div class="card-cat">'+p.category+'</div>'+
@@ -543,8 +547,8 @@ function renderProducts(){
         chips+
         '<div class="card-price" id="cp-'+p.id+'">'+fmt(price)+' FCFA</div>'+
         '<div class="card-price-note">'+(p.qtyPricing&&p.qtyPricing.length>1?"Prix degressif selon quantite":"")+'</div>'+
-        '<button class="btn-add-cart" onclick="event.stopPropagation();addToCartFromCard(\''+p.id+'\',0)">🛒 Ajouter au panier</button>'+
-        '<button class="btn-wa" onclick="event.stopPropagation();orderWA(\''+p.id+'\',0,1)">'+waIcon()+' '+tx("orderBtn")+'</button>'+
+        '<button class="btn-add-cart" onclick="event.stopPropagation();addToCartFromCard(\''+p.id+'\',0)">🛒 '+(preorder&&preorder.active?'Précommander':'Ajouter au panier')+'</button>'+
+        '<button class="btn-wa" onclick="event.stopPropagation();orderWA(\''+p.id+'\',0,1)">'+waIcon()+' '+(preorder&&preorder.active?'Précommander via WhatsApp':tx("orderBtn"))+'</button>'+
       '</div>';
     card.addEventListener("click",function(){openModal(p.id,0);});
     grid.appendChild(card);
@@ -1101,6 +1105,61 @@ function checkoutCartOrange(){
   window.open('https://wa.me/'+wa+'?text='+buildCartMsg(tpl), '_blank');
 }
 
+// ====== PRÉCOMMANDE ======
+// ====================================================================
+// ⚙️  CONFIGURATION — modifie ces 3 lignes puis pousse sur Git
+// ====================================================================
+var PREORDER_ACTIVE = true;
+var PREORDER_LAUNCH = "2026-11-12T10:00:00"; // Date/heure de lancement
+var PREORDER_TITLE  = "BIENTÔT DISPONIBLE !!!"; // Titre de la bannière
+// ====================================================================
+
+var preorder = {active: PREORDER_ACTIVE, launchDate: PREORDER_LAUNCH, title: PREORDER_TITLE};
+var cdInterval = null;
+
+function initPreorder(){
+  applyPreorderUI();
+}
+
+function applyPreorderUI(){
+  var bar = document.getElementById('preorderBar');
+  if(!bar) return;
+
+  if(!preorder.active || !preorder.launchDate){
+    bar.style.display = 'none';
+    if(cdInterval) clearInterval(cdInterval);
+    renderProducts();
+    return;
+  }
+
+  var titleEl = document.getElementById('preorderBarTitle');
+  if(titleEl) titleEl.textContent = preorder.title;
+  bar.style.display = 'block';
+  renderProducts();
+  startCountdown(new Date(preorder.launchDate).getTime());
+}
+
+function startCountdown(targetTs){
+  if(cdInterval) clearInterval(cdInterval);
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = targetTs - Date.now();
+    if(diff <= 0){
+      preorder.active = false;
+      document.getElementById('preorderBar').style.display = 'none';
+      clearInterval(cdInterval);
+      renderProducts();
+      return;
+    }
+    document.getElementById('cdDays').textContent  = pad(Math.floor(diff / 86400000));
+    document.getElementById('cdHours').textContent = pad(Math.floor((diff % 86400000) / 3600000));
+    document.getElementById('cdMins').textContent  = pad(Math.floor((diff % 3600000) / 60000));
+    document.getElementById('cdSecs').textContent  = pad(Math.floor((diff % 60000) / 1000));
+  }
+  tick();
+  cdInterval = setInterval(tick, 1000);
+}
+
 // ====== INIT ======
 loadState();
 renderSteps();
@@ -1108,4 +1167,5 @@ renderProducts();
 renderPayCards();
 updateWaLinks();
 applyLang();
+initPreorder();
 

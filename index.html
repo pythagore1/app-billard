@@ -40,6 +40,28 @@
   Installer l'app
 </button>
 
+<!-- BANNIÈRE PRÉCOMMANDE / COMPTE À REBOURS -->
+<div id="preorderBar" style="display:none">
+  <div class="preorder-bar-inner">
+    <div class="preorder-bar-left">
+      <span class="preorder-bar-icon">🎱</span>
+      <div>
+        <div class="preorder-bar-title" id="preorderBarTitle">Lancement imminent !</div>
+        <div class="preorder-bar-sub" id="preorderBarSub">Les produits seront disponibles dans</div>
+      </div>
+    </div>
+    <div class="countdown-blocks">
+      <div class="cd-block"><span class="cd-num" id="cdDays">00</span><span class="cd-lbl">jours</span></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block"><span class="cd-num" id="cdHours">00</span><span class="cd-lbl">heures</span></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block"><span class="cd-num" id="cdMins">00</span><span class="cd-lbl">min</span></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-block"><span class="cd-num" id="cdSecs">00</span><span class="cd-lbl">sec</span></div>
+    </div>
+  </div>
+</div>
+
 <!-- PANIER FAB -->
 <button id="cartFab" onclick="openCart()">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;flex-shrink:0"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
@@ -300,6 +322,18 @@
         </div>
         <div class="adm-card"><h3>Numeros Orange Money</h3><div id="listOrange"></div>
           <div class="add-form"><div class="fg"><label>Label</label><input type="text" id="inOrgLabel" placeholder="Compte principal"/></div><div class="fg"><label>Numero Orange</label><input type="text" id="inOrgNum" placeholder="+237656929480"/></div><button class="bsm bg" style="align-self:flex-end;padding:9px 16px" onclick="addContact('orange')">+ Ajouter</button></div>
+        </div>
+        <div class="adm-card"><h3>Mode Précommande ⏳</h3>
+          <div style="background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:8px;padding:14px;font-size:12px;color:var(--gray-light);line-height:1.7">
+            <div style="color:var(--gold);font-weight:600;margin-bottom:8px;font-size:13px">⚙️ Configuration dans <code style="background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px">sw.js</code></div>
+            Pour activer le mode précommande, modifie ces 3 lignes dans <strong>sw.js</strong> puis incrémente <code style="background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px">CACHE_VERSION</code> et pousse sur Git :<br/><br/>
+            <code style="display:block;background:rgba(0,0,0,.4);padding:10px 12px;border-radius:6px;font-size:11px;line-height:1.8;color:#e2c96e">
+              const PREORDER_ACTIVE = true;<br/>
+              const PREORDER_LAUNCH = "2026-07-07T10:00:00";<br/>
+              const PREORDER_TITLE  = "Lancement imminent !";
+            </code><br/>
+            Pour désactiver : remets <code style="background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px">PREORDER_ACTIVE = false</code> et repousse.
+          </div>
         </div>
         <div class="adm-card"><h3>Changer le mot de passe</h3>
           <div class="fgrid"><div class="fg"><label>Nouveau</label><input type="password" id="newPwd" placeholder="Nouveau mot de passe"/></div><div class="fg"><label>Confirmer</label><input type="password" id="confPwd" placeholder="Confirmer"/></div></div>

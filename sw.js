@@ -1,6 +1,6 @@
 // Ruach Billard — Service Worker
-// Version: incrémente ce numéro à chaque déploiement pour forcer le rafraîchissement
-const CACHE_VERSION = 'v3';
+// ⚠️  Incrémente CACHE_VERSION à chaque déploiement pour forcer le rafraîchissement
+const CACHE_VERSION = 'v1';
 const CACHE_NAME = 'ruach-billard-' + CACHE_VERSION;
 
 // Fichiers à mettre en cache immédiatement à l'installation
@@ -18,8 +18,9 @@ self.addEventListener('install', function(event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function(cache) {
       return cache.addAll(PRECACHE_URLS);
+    }).then(function() {
+      return self.skipWaiting();
     })
-    // Pas de skipWaiting() ici : on attend que l'utilisateur clique sur "Mettre à jour"
   );
 });
 
@@ -116,6 +117,22 @@ self.addEventListener('fetch', function(event) {
           }
           return response;
         });
+      })
+    );
+    return;
+  }
+
+  // --- preorder.json : network-first (config toujours fraîche) ---
+  if (url.pathname === '/preorder.json') {
+    event.respondWith(
+      fetch(event.request).then(function(response) {
+        if (response && response.status === 200) {
+          var toCache = response.clone();
+          caches.open(CACHE_NAME).then(function(cache) { cache.put(event.request, toCache); });
+        }
+        return response;
+      }).catch(function() {
+        return caches.match('/preorder.json');
       })
     );
     return;
