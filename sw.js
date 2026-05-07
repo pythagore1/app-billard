@@ -1,6 +1,6 @@
 // Ruach Billard — Service Worker
 // Version: incrémente ce numéro à chaque déploiement pour forcer le rafraîchissement
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v2';
 const CACHE_NAME = 'ruach-billard-' + CACHE_VERSION;
 
 // Fichiers à mettre en cache immédiatement à l'installation

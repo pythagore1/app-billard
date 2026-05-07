@@ -1,5 +1,6 @@
 :root{--gold:#C9A84C;--gold-light:#E8D08A;--gold-dark:#8B6914;--dark:#0D0D0D;--dark2:#1A1A1A;--dark3:#262626;--gray:#888;--gray-light:#bbb;--white:#F8F6F0;--green:#25D366;--orange:#FF6600;--red:#E24B4A;--ff-head:"Playfair Display",Georgia,serif;--ff-body:"DM Sans",sans-serif;--radius:12px;--radius-sm:8px;--trans:.22s cubic-bezier(.4,0,.2,1)}
 *{margin:0;padding:0;box-sizing:border-box}html{scroll-behavior:smooth}
+*:focus{outline:none}*:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 body{font-family:var(--ff-body);background:var(--dark);color:var(--white);min-height:100vh;overflow-x:hidden}
 ::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:var(--dark2)}::-webkit-scrollbar-thumb{background:var(--gold-dark);border-radius:3px}
 #vitrine{display:block}#admin-panel{display:none}
